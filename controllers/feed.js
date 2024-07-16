@@ -26,12 +26,13 @@ exports.createPost = (req, res, next) => {
   }
   if (!req.file) {
     const error = new Error('No image prorvided');
-    error.ststauCode = 422;
+    error.statusCode = 422;
     throw error;
   }
+  const imageUrl = req.file.path.replace('\\', '/');
   const title = req.body.title;
   const content = req.body.content;
-  const imageUrl = req.file.path.replace('\\', '/');
+  //let creator;
   const post = new Post({
     title: title,
     content: content,
@@ -65,7 +66,7 @@ exports.getPost = (req, res, next) => {
         error.statusCode = 404;
         throw error;
       }
-      post.imageUrl = post.imageUrl.replace(/\\/g, '/');
+      post.imageUrl = post.imageUrl.replace('\\', '/');
       res.status(200).json({ message: 'Post fetched.', post: post });
     })
     .catch((err) => {
