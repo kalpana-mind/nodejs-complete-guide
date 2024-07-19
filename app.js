@@ -67,7 +67,16 @@ mongoose
     'mongodb+srv://kalpanareadwrite:Sd5z6gsdbzGs8rSF@cluster0.zxyvbda.mongodb.net/messages?retrywrites=true'
   )
   .then((result) => {
-    app.listen(8080);
+    const server = app.listen(8080);
+    const io = require('./socket').init(server, {
+      cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+      },
+    });
+    io.on('connection', (socket) => {
+      console.log('Client connected');
+    });
   })
   .catch((err) => {
     console.log(err);
